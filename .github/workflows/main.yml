@@ -3,10 +3,10 @@ name: Build on Ubuntu
 on:
   push:
     branches:
-      - master
+      - master  # Aktualisieren Sie dies, um Ihren Branch widerzuspiegeln
   pull_request:
     branches:
-      - master
+      - master  # Aktualisieren Sie dies, um Ihren Branch widerzuspiegeln
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Install Rust (workaround for rustup path issues)
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          echo "::add-path::$HOME/.cargo/bin"
+          echo "$HOME/.cargo/bin" >> $GITHUB_ENV
           source $HOME/.cargo/env
 
       - name: Verify Rust installation
