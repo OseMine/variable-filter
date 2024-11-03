@@ -25,9 +25,6 @@ jobs:
       - name: Verify Rust installation
         run: rustc --version
 
-      - name: Install nih-plug without sudo
-        run: cargo install --git https://github.com/robbert-vdh/nih-plug.git cargo-nih-plug
-
       - name: Fetch Cargo dependencies
         run: cargo fetch
 
