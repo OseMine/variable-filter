@@ -1,46 +1,38 @@
-name: Build
+name: Build on Ubuntu
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
   pull_request:
-    branches: [ master ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libasound2-dev libgl1-mesa-dev
-    - name: Run tests
-      run: cargo test --verbose
-
   build:
-    name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Install dependencies (Ubuntu)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libasound2-dev libgl1-mesa-dev
-    - name: Build
-      run: cargo build --release --verbose
-    - name: Bundle Plugin
-      run: cargo xtask bundle variable-filter --release
-    - name: Upload bundled plugin
-      uses: actions/upload-artifact@v3
-      with:
-        name: bundled-plugin-${{ matrix.os }}
-        path: target/release  # Pfad anpassen, falls die gebündelten Dateien woanders gespeichert sind
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+
+      - name: Install nih-plug
+        run: sudo cargo install --git https://github.com/robbert-vdh/nih-plug.git cargo-nih-plug
+
+      - name: Fetch Cargo dependencies
+        run: cargo fetch
+
+      - name: Build project with xtask
+        run: cargo xtask bundle --release
+
+      - name: Upload Build directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: Build/
