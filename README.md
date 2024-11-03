@@ -98,14 +98,14 @@ self.filter.set_filter_type(match filter_type {
 ## Building the Project
 
 1. Ensure Rust and Cargo are installed.
-2. Clone the repository: `git clone https://github.com/yourusername/variable-filter.git`
+2. Clone the repository: `git clone https://github.com/OseMine/variable-filter.git`
 3. Navigate to the project directory: `cd variable-filter`
 4. Build the project: `cargo build --release`
 5. Find the plugin files in the `target/release` directory.
 
 ## Using the Plugin
 
-- Copy the created plugin files (`.dll` for Windows, `.so` for Linux, `.dylib` for macOS) to your VST3 plugin directory.
+- Copy the created plugin files to your VST3/CLAP plugin directory.
 - Load the plugin in your preferred DAW.
 
 ## License
