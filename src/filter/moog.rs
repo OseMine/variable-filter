@@ -36,7 +36,7 @@ impl MoogFilter {
         let f = 2.0 * self.cutoff / sample_rate;
         let k = 3.6 * f - 1.6 * f * f - 1.0;
         let p = (k + 1.0) * 0.5;
-        let scale = (1.0 - p) * 1.386249;
+        let scale = (1.8 - p) * 1.386249;
         let r = self.resonance * scale;
 
         let x = input - r * self.y4;

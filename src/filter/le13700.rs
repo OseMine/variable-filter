@@ -1,10 +1,14 @@
 pub struct Le13700Filter {
     cutoff: f32,
     resonance: f32,
-    vca1: f32,
-    vca2: f32,
-    cap1: f32,
-    cap2: f32,
+    y1: f32,
+    y2: f32,
+    y3: f32,
+    y4: f32,
+    oldx: f32,
+    oldy1: f32,
+    oldy2: f32,
+    oldy3: f32,
 }
 
 impl Le13700Filter {
@@ -12,10 +16,14 @@ impl Le13700Filter {
         Self {
             cutoff: 1000.0,
             resonance: 0.0,
-            vca1: 0.0,
-            vca2: 0.0,
-            cap1: 0.0,
-            cap2: 0.0,
+            y1: 0.0,
+            y2: 0.0,
+            y3: 0.0,
+            y4: 0.0,
+            oldx: 0.0,
+            oldy1: 0.0,
+            oldy2: 0.0,
+            oldy3: 0.0,
         }
     }
 
@@ -25,19 +33,26 @@ impl Le13700Filter {
     }
 
     pub fn process(&mut self, input: f32, sample_rate: f32) -> f32 {
-        let dt = 1.0 / sample_rate;
-        let fc = self.cutoff / sample_rate;
-        let k = 2.0 * std::f32::consts::PI * fc;
-        
-        let ota_gain = 1.0 - (-k * dt).exp();
-        let feedback = self.resonance * 4.0;
+        let f = 2.0 * self.cutoff / sample_rate;
+        let k = 3.6 * f - 1.6 * f * f - 1.0;
+        let p = (k + 1.0) * 0.5;
+        let scale = (1.0 - p) * 1.386249;
+        let r = self.resonance * scale;
 
-        self.vca1 += (input - self.cap1 - feedback * self.cap2) * ota_gain;
-        self.vca2 += (self.cap1 - self.cap2) * ota_gain;
+        let x = input - r * self.y4;
 
-        self.cap1 += self.vca1 * dt;
-        self.cap2 += self.vca2 * dt;
+        self.y1 = x * p + self.oldx * p - k * self.y1;
+        self.y2 = self.y1 * p + self.oldy1 * p - k * self.y2;
+        self.y3 = self.y2 * p + self.oldy2 * p - k * self.y3;
+        self.y4 = self.y3 * p + self.oldy3 * p - k * self.y4;
 
-        self.cap2
+        self.y4 = self.y4.clamp(-1.0, 1.0);
+
+        self.oldx = x;
+        self.oldy1 = self.y1;
+        self.oldy2 = self.y2;
+        self.oldy3 = self.y3;
+
+        self.y4
     }
 }
