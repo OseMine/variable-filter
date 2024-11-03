@@ -14,8 +14,8 @@ jobs:
       - name: Download Build artifact
         uses: actions/download-artifact@v3
         with:
-          name: build-artifact  # Achten Sie darauf, dass dieser Name übereinstimmt
-          path: ./Build
+          name: build-artifact
+          path: ./target/bundled
 
-      - name: List files in Build directory
-        run: dir .\Build
+      - name: List files in the bundled directory
+        run: dir .\target\bundled
