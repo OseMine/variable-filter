@@ -1,5 +1,5 @@
 # Variable Filter Plugin
-
+[![CI](https://github.com/OseMine/variable-filter/actions/workflows/main.yml/badge.svg)](https://github.com/OseMine/variable-filter/actions/workflows/main.yml)
 A versatile audio filter plugin that implements various filter types and allows for dynamic parameter smoothing.
 
 ## Project Structure
