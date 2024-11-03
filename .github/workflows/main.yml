@@ -31,13 +31,13 @@ jobs:
         run: cargo fetch
 
       - name: Build variable-filter project with xtask
-        run: cargo xtask bundle variable-filter --release  # Der angepasste Befehl
+        run: cargo xtask bundle variable-filter --release
 
-      - name: List files in the working directory
-        run: ls -R  # Auflisten aller Dateien und Verzeichnisse im Arbeitsverzeichnis
+      - name: List files in the target/bundled directory
+        run: ls -R ./target/bundled
 
-      - name: Upload Build directory
+      - name: Upload Build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
-          path: Build/
+          path: ./target/bundled
