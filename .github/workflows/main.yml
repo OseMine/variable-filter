@@ -3,10 +3,10 @@ name: Build on Ubuntu
 on:
   push:
     branches:
-      - master  # Aktualisieren Sie dies, um Ihren Branch widerzuspiegeln
+      - master  # Verwenden Sie 'master', wenn das Ihr Hauptbranch ist
   pull_request:
     branches:
-      - master  # Aktualisieren Sie dies, um Ihren Branch widerzuspiegeln
+      - master  # Verwenden Sie 'master', wenn das Ihr Hauptbranch ist
 
 jobs:
   build:
@@ -19,19 +19,19 @@ jobs:
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          echo "PATH=$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
       - name: Verify Rust installation
         run: rustc --version
 
-      - name: Install nih-plug without sudo
+      - name: Install nih-plug
         run: cargo install --git https://github.com/robbert-vdh/nih-plug.git cargo-nih-plug
 
       - name: Fetch Cargo dependencies
         run: cargo fetch
 
       - name: Build project with xtask
-        run: cargo xtask bundle --release
+        run: cargo xtask bundle variable-filter --release
 
       - name: Upload Build directory
         uses: actions/upload-artifact@v3
