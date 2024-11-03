@@ -16,11 +16,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Install Rust (workaround for rustup path issues)
+      - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          echo "$HOME/.cargo/bin" >> $GITHUB_ENV
-          source $HOME/.cargo/env
+          echo "PATH=$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
 
       - name: Verify Rust installation
         run: rustc --version
