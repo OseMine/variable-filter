@@ -16,6 +16,12 @@ pub struct VariableFilterParams {
 
     #[id = "smoothing_time"]
     pub smoothing_time: FloatParam,
+
+    #[id = "sync_mode"]
+    pub sync_mode: EnumParam<SyncMode>,
+
+    #[id = "sync_value"]
+    pub sync_value: EnumParam<SyncValue>,
 }
 
 #[derive(Enum, PartialEq, Clone)]
@@ -23,6 +29,36 @@ pub enum FilterType {
     Moog,
     Roland,
     Le13700,
+}
+
+#[derive(Enum, PartialEq, Clone)]
+pub enum SyncMode {
+    Milliseconds,
+    MidiSync,
+}
+
+#[derive(Enum, PartialEq, Clone)]
+pub enum SyncValue {
+    Bars4,
+    Bars3_5,
+    Bars3,
+    Bars2_5,
+    Bars2,
+    Bars1_5,
+    Bar1,
+    Note3_4,
+    Note1_2,
+    Note3_8,
+    Note1_4,
+    Note3_16,
+    Note1_6,
+    Note1_8,
+    Note1_12,
+    Note1_16,
+    Note1_24,
+    Note1_32,
+    Note1_48,
+    Note1_64,
 }
 
 impl VariableFilterParams {
@@ -58,6 +94,10 @@ impl VariableFilterParams {
                 },
             )
             .with_unit(" ms"),
+
+            sync_mode: EnumParam::new("Sync Mode", SyncMode::Milliseconds),
+
+            sync_value: EnumParam::new("Sync Value", SyncValue::Note1_4),
         }
     }
 }

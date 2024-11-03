@@ -100,8 +100,9 @@ self.filter.set_filter_type(match filter_type {
 1. Ensure Rust and Cargo are installed.
 2. Clone the repository: `git clone https://github.com/OseMine/variable-filter.git`
 3. Navigate to the project directory: `cd variable-filter`
-4. Build the project: `cargo build --release`
-5. Find the plugin files in the `target/release` directory.
+4. Install all the necessary dependencies: `cargo fetch`
+5. Build the project: `cargo xtask bundle variable-filter --release`
+6. Find the plugin files in the `target/release` directory.
 
 ## Using the Plugin
 
