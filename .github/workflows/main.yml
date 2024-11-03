@@ -3,10 +3,10 @@ name: Build on Ubuntu
 on:
   push:
     branches:
-      - master  # Verwenden Sie 'master', wenn das Ihr Hauptbranch ist
+      - master
   pull_request:
     branches:
-      - master  # Verwenden Sie 'master', wenn das Ihr Hauptbranch ist
+      - master
 
 jobs:
   build:
@@ -32,6 +32,9 @@ jobs:
 
       - name: Build variable-filter project with xtask
         run: cargo xtask bundle variable-filter --release  # Der angepasste Befehl
+
+      - name: List files in the working directory
+        run: ls -R  # Auflisten aller Dateien und Verzeichnisse im Arbeitsverzeichnis
 
       - name: Upload Build directory
         uses: actions/upload-artifact@v3
