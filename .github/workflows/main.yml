@@ -39,3 +39,8 @@ jobs:
       run: cargo build --release --verbose
     - name: Bundle Plugin
       run: cargo xtask bundle variable-filter --release
+    - name: Upload bundled plugin
+      uses: actions/upload-artifact@v3
+      with:
+        name: bundled-plugin-${{ matrix.os }}
+        path: target/release  # Pfad anpassen, falls die gebündelten Dateien woanders gespeichert sind

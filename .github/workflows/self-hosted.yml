@@ -15,27 +15,20 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libasound2-dev libgl1-mesa-dev
     - name: Run tests
       run: cargo test --verbose
 
   build:
     name: Build
     runs-on: self-hosted
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v3
-    - name: Install dependencies (Ubuntu)
-      if: matrix.os == 'self-hosted'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libasound2-dev libgl1-mesa-dev
     - name: Build
       run: cargo build --release --verbose
     - name: Bundle Plugin
       run: cargo xtask bundle variable-filter --release
+    - name: Upload bundled plugin
+      uses: actions/upload-artifact@v3
+      with:
+        name: bundled-plugin-windows
+        path: target/self-hosted
