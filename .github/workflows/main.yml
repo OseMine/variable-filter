@@ -3,10 +3,10 @@ name: Build on Ubuntu
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -16,14 +16,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
+      - name: Install Rust (workaround for rustup path issues)
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          echo "::add-path::$HOME/.cargo/bin"
+          source $HOME/.cargo/env
 
-      - name: Install nih-plug
-        run: sudo cargo install --git https://github.com/robbert-vdh/nih-plug.git cargo-nih-plug
+      - name: Verify Rust installation
+        run: rustc --version
+
+      - name: Install nih-plug without sudo
+        run: cargo install --git https://github.com/robbert-vdh/nih-plug.git cargo-nih-plug
 
       - name: Fetch Cargo dependencies
         run: cargo fetch
