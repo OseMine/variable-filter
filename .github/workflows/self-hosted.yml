@@ -1,4 +1,4 @@
-name: CI
+name: self-hosted
 
 on:
   push:
@@ -12,7 +12,7 @@ env:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
@@ -24,7 +24,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
