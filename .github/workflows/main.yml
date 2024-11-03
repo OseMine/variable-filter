@@ -30,8 +30,8 @@ jobs:
       - name: Fetch Cargo dependencies
         run: cargo fetch
 
-      - name: Build project with xtask
-        run: cargo xtask bundle variable-filter --release
+      - name: Build variable-filter project with xtask
+        run: cargo xtask bundle variable-filter --release  # Der angepasste Befehl
 
       - name: Upload Build directory
         uses: actions/upload-artifact@v3
