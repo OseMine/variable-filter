@@ -54,10 +54,9 @@ jobs:
           key: ${{ matrix.name }}-${{ matrix.cross-target }}
 
       - name: Set up Rust toolchain
-        uses: rust-lang/rustup@v2
+        uses: dtolnay/rust-toolchain@nightly
         with:
-          profile: minimal
-          target: ${{ matrix.cross-target }}
+          targets: ${{ matrix.cross-target }}
 
       - name: Package all targets from bundler.toml
         run: |
