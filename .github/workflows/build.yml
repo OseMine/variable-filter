@@ -79,7 +79,7 @@ jobs:
 
       - name: Determine build archive name
         run: |
-          ARCHIVE_NAME="nih-plugs-$(date -u +"%Y-%m-%d-%H%m%S")-${{ matrix.name }}"
+          ARCHIVE_NAME="nih-plugs-$(date -u +"%Y-%m-%d-%H%M%S")-${{ matrix.name }}"
           echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> "$GITHUB_ENV"
 
       - name: Move all packaged plugin into a directory
