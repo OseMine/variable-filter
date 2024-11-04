@@ -61,7 +61,7 @@ jobs:
       - name: Package all targets from bundler.toml
         run: |
           runner_name=${{ matrix.name }}
-          package_args=("-p" "variable-filter")  # explizit das Hauptpaket angeben
+          package_args=("-p" "variable-filter")  # Explicitly specify the main package
           
           if [[ $runner_name = 'macos-universal' ]]; then
             export MACOSX_DEPLOYMENT_TARGET=10.13
@@ -85,7 +85,13 @@ jobs:
           mv target/bundled/* "$ARCHIVE_NAME/$ARCHIVE_NAME"
 
       - name: Add an OS-specific readme file with installation instructions
-        run: cp ".github/workflows/readme-${{ runner.os }}.txt" "$ARCHIVE_NAME/$ARCHIVE_NAME/README.txt"
+        run: |
+          README_FILE=".github/workflows/readme-${{ matrix.name == 'ubuntu-20.04' && 'Linux' || matrix.name }}.txt"
+          if [[ -f "$README_FILE" ]]; then
+            cp "$README_FILE" "$ARCHIVE_NAME/$ARCHIVE_NAME/README.txt"
+          else
+            echo "No specific README file found for ${{ matrix.name }}"
+          fi
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.4.3
