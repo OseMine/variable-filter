@@ -14,13 +14,16 @@ defaults:
   run:
     shell: bash
 
+env:
+  ACTIONS_STEP_DEBUG: true  # Aktiviert detailliertes Debugging
+
 jobs:
   package:
     strategy:
       matrix:
         include:
           - { name: ubuntu-20.04,       os: ubuntu-20.04,   cross-target: '' }
-          - { name: macos-universal,    os: macos-12,       cross-target: aarch64-apple-darwin }
+          - { name: macos-universal,    os: macos-13,       cross-target: aarch64-apple-darwin }  # Aktualisierte macOS-Version
           - { name: windows,            os: windows-latest, cross-target: '' }
     name: Package plugin binaries
     runs-on: ${{ matrix.os }}
@@ -54,9 +57,12 @@ jobs:
           key: ${{ matrix.name }}-${{ matrix.cross-target }}
 
       - name: Set up Rust toolchain
-        uses: dtolnay/rust-toolchain@nightly
+        # Wechsle zur stabilen Version von Rust für stabilere Builds
+        uses: actions-rs/toolchain@v1
         with:
-          targets: ${{ matrix.cross-target }}
+          toolchain: stable
+          profile: minimal
+          override: true
 
       - name: Package all targets from bundler.toml
         run: |
