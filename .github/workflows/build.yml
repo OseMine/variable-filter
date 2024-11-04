@@ -60,12 +60,9 @@ jobs:
 
       - name: Package all targets from bundler.toml
         run: |
-          package_args=()
-          for package in $(cargo xtask known-packages); do
-            package_args+=("-p" "$package")
-          done
-
           runner_name=${{ matrix.name }}
+          package_args=("-p" "variable-filter")  # explizit das Hauptpaket angeben
+          
           if [[ $runner_name = 'macos-universal' ]]; then
             export MACOSX_DEPLOYMENT_TARGET=10.13
             cargo xtask bundle-universal "${package_args[@]}" --release
