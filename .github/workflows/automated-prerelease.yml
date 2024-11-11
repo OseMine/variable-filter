@@ -1,0 +1,81 @@
+name: Create Automated Pre-release
+
+on:
+  workflow_run:
+    workflows: ["Automated Builds"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-prerelease:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest commit info
+        id: commit_info
+        run: |
+          echo "message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          changelog=$(git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$changelog" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create pre-release tag
+        id: create_tag
+        run: |
+          tag_name="prerelease-$(date +'%Y%m%d-%H%M%S')"
+          git tag $tag_name
+          git push origin $tag_name
+          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          path: ./artifacts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Prepare artifacts for release
+        run: |
+          mkdir release_artifacts
+          for dir in ./artifacts/nih-plugs-*; do
+            if [ -d "$dir" ]; then
+              zip_name=$(basename "$dir").zip
+              (cd "$dir" && zip -r "../../release_artifacts/$zip_name" .)
+            fi
+          done
+
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.create_tag.outputs.tag_name }}
+          name: "Pre-release ${{ steps.create_tag.outputs.tag_name }}"
+          body: |
+            This is an automated pre-release based on the latest commit:
+
+            Commit Message: ${{ steps.commit_info.outputs.message }}
+            Commit SHA: ${{ steps.commit_info.outputs.sha }}
+
+            [Full Changelog](https://github.com/OseMine/variable-filter/commits/)
+
+            Changes since last release:
+            ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: "./release_artifacts/*.zip"
