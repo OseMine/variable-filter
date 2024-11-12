@@ -1,5 +1,6 @@
 # Variable Filter Plugin
 [![Build](https://github.com/OseMine/variable-filter/actions/workflows/automated-prerelease.yml)]
+
 [![Latest Release](https://img.shields.io/github/v/release/OseMine/variable-filter?style=flat)]
 
 
