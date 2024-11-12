@@ -61,7 +61,7 @@ jobs:
       - name: Package all targets from bundler.toml
         run: |
           runner_name=${{ matrix.name }}
-          package_args=("-p" "variable-synth")  # Explicitly specify the main package
+          package_args=("-p" "variable-filter")  # Explicitly specify the main package
           
           if [[ $runner_name = 'macos-universal' ]]; then
             export MACOSX_DEPLOYMENT_TARGET=10.13
