@@ -29,6 +29,7 @@ pub enum FilterType {
     Moog,
     Roland,
     Le13700,
+    ARP4075,
 }
 
 #[derive(Enum, PartialEq, Clone)]

@@ -94,6 +94,7 @@ impl Plugin for VariableFilter {
                 ParamFilterType::Moog => FilterType::Moog,
                 ParamFilterType::Roland => FilterType::Roland,
                 ParamFilterType::Le13700 => FilterType::Le13700,
+                ParamFilterType::ARP4075 => FilterType::ARP4075,
             });
     
             for sample in channel_samples {

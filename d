@@ -1,7 +1,8 @@
-# Variable Filter Plugin
-[![Build](https://github.com/OseMine/variable-filter/actions/workflows/main.yml)]
-[![Latest Release](https://img.shields.io/github/v/release/OseMine/variable-filter?style=flat)]
+Hier ist die aktualisierte README mit dem hinzugefügten Badge für den neuesten Release, im gleichen Stil wie der Build-Status:
 
+# Variable Filter Plugin
+[Build]
+[Latest Release
 
 A versatile audio filter plugin that implements various filter types and allows for dynamic parameter smoothing.
 
@@ -115,3 +116,6 @@ self.filter.set_filter_type(match filter_type {
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+Citations:
+[1] https://github.com/OseMine/variable-filter/actions/workflows/main.yml
